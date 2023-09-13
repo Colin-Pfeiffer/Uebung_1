@@ -28,11 +28,9 @@ class Game:
             self.clock.tick(Settings.FPS)
 
     def update(self) -> None:
-        self.all_mobs.update()
+        pass
 
     def draw(self) -> None:
-        self.screen.blit(self.background_image, (0, 0))
-        self.all_mobs.draw(self.screen)
         pygame.display.flip()
 
     def watch_for_events(self) -> None:
