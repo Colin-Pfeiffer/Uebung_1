@@ -60,12 +60,12 @@ class Game:
         pygame.init()
 
         self.screen = pygame.display.set_mode((Settings.WINDOW.size))
-        pygame.display.set_caption("Bitmaps laden und ausgeben")
+        pygame.display.set_caption("Übung 1")
         self.clock = pygame.time.Clock()
 
         self.all_obstacles = pygame.sprite.Group()
         for _ in range(Settings.OBSTACLE_NUM):
-            self.obstacles = Obstacle("test.png", 1,1)#random.uniform(0.75, 1.5), random.uniform(0.75, 1.5))
+            self.obstacles = Obstacle("vfl_bochum.png", 1,1)#random.uniform(0.75, 1.5), random.uniform(0.75, 1.5))
             self.all_obstacles.add(self.obstacles)
 
         self.object = Object("football.png")
