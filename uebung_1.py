@@ -19,7 +19,7 @@ class Settings:
     OBSTACLE_SAFEZONE = 200     # Abstand von dem Spawn
     OBJECT_SPAWNPOINT = 0       # Startpunkt der Objekte
     OBJECT_SIZE = 30            # Größe der Objekte
-    OBJECT_SPAWNRATE = 75       # Zeit in ms, in der ein neues Objekt gespawnt wird
+    OBJECT_SPAWNRATE = 1000       # Zeit in ms, in der ein neues Objekt gespawnt wird
 
 class Obstacle(pygame.sprite.Sprite):
     def __init__(self, image: str, scale_multiply_x: float = 1.0, scale_multiply_y: float = 1.0) -> None:
@@ -39,16 +39,16 @@ class Object(pygame.sprite.Sprite):
         self.rect.left = Settings.OBJECT_SPAWNPOINT
         self.rect.top = Settings.OBJECT_SPAWNPOINT
         # Zufällige Geschwindigkeit
-        self.speedx = random.uniform(1.5, 7.5)
-        self.speedy = random.uniform(1.5, 7.5)
+        self.speed_x = random.uniform(1.0, 7.5)
+        self.speed_y = random.uniform(1.0, 7.5)
     
     def update(self) -> None:
         # Bewegt das Objekt und lässt es an den Rändern abprallen
-        self.rect.move_ip(self.speedx, self.speedy)
+        self.rect.move_ip(self.speed_x, self.speed_y)
         if self.rect.right > Settings.WINDOW.right or self.rect.left <= 0:
-            self.speedx *= -1
+            self.speed_x *= -1
         if self.rect.bottom > Settings.WINDOW.bottom or self.rect.top <= 0:
-            self.speedy *= -1
+            self.speed_y *= -1
 
 class Game:
     def __init__(self) -> None:
@@ -62,10 +62,10 @@ class Game:
 
         self.all_obstacles = pygame.sprite.Group()
         for _ in range(Settings.OBSTACLE_NUM):
-            self.obstacles = Obstacle("test.png", random.uniform(0.75, 1.5), random.uniform(0.75, 1.5))
+            self.obstacles = Obstacle("test.png", 1,1)#random.uniform(0.75, 1.5), random.uniform(0.75, 1.5))
             self.all_obstacles.add(self.obstacles)
 
-        self.object = Object("test.png")
+        self.object = Object("football.png")
         self.all_objects = pygame.sprite.Group()
         self.all_objects.add(self.object)
 
@@ -79,7 +79,7 @@ class Game:
             self.spawn_new_mob()
             self.clock.tick(Settings.FPS)
             # Wie man eine Kollision überprüft: https://coderslegacy.com/python/pygame-sprite-collision-detection/
-            pygame.sprite.groupcollide(self.all_objects, self.all_obstacles, True, False)
+            pygame.sprite.groupcollide(self.all_objects, self.all_obstacles, True, False,  pygame.sprite.collide_circle)
 
     def update(self) -> None:
         self.all_objects.update()
@@ -89,7 +89,7 @@ class Game:
         time_now = pygame.time.get_ticks()
         if time_now - self.time_start > Settings.OBJECT_SPAWNRATE:
             self.time_start = time_now            
-            self.object = Object("test.png")
+            self.object = Object("football.png")
             self.all_objects.add(self.object)
 
     def draw(self) -> None:
