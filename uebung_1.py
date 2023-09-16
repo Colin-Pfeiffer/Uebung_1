@@ -22,7 +22,7 @@ class Settings:
     OBSTACLE_SAFEZONE = 200     # Abstand von dem Spawn
     OBJECT_SPAWNPOINT = 0       # Startpunkt der Objekte
     OBJECT_SIZE = 30            # Größe der Objekte
-    OBJECT_SPAWNRATE = 200       # Zeit in ms, in der ein neues Objekt gespawnt wird
+    OBJECT_SPAWNRATE = 200      # Zeit in ms, in der ein neues Objekt gespawnt wird
 
 class Obstacle(pygame.sprite.Sprite):
     def __init__(self, image: str, scale_multiply_x: float = 1.0, scale_multiply_y: float = 1.0) -> None:
@@ -42,8 +42,8 @@ class Object(pygame.sprite.Sprite):
         self.rect.left = Settings.OBJECT_SPAWNPOINT
         self.rect.top = Settings.OBJECT_SPAWNPOINT
         # Zufällige Geschwindigkeit
-        self.speed_x = random.uniform(1.0, 7.5)
-        self.speed_y = random.uniform(1.0, 7.5)
+        self.speed_x = random.randint(1, 8)
+        self.speed_y = random.randint(1, 8)
     
     def update(self) -> None:
         # Bewegt das Objekt und lässt es an den Rändern abprallen
