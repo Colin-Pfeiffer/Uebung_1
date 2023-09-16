@@ -22,7 +22,7 @@ class Settings:
     OBSTACLE_SAFEZONE = 200     # Abstand von dem Spawn
     OBJECT_SPAWNPOINT = 0       # Startpunkt der Objekte
     OBJECT_SIZE = 30            # Größe der Objekte
-    OBJECT_SPAWNRATE = 50      # Zeit in ms, in der ein neues Objekt gespawnt wird
+    OBJECT_SPAWNRATE = 50       # Zeit in ms, in der ein neues Objekt gespawnt wird
 
 class Obstacle(pygame.sprite.Sprite):
     def __init__(self, image: str, scale_multiply_x: float = 1.0, scale_multiply_y: float = 1.0) -> None:
@@ -87,7 +87,7 @@ class Game:
             self.spawn_new_mob()
             self.clock.tick(Settings.FPS)
             # Wie man eine Kollision überprüft: https://coderslegacy.com/python/pygame-sprite-collision-detection/
-            pygame.sprite.groupcollide(self.all_objects, self.all_obstacles, True, False,  pygame.sprite.collide_circle)
+            pygame.sprite.groupcollide(self.all_objects, self.all_obstacles, True, False)
 
     def update(self) -> None:
         self.all_objects.update()
