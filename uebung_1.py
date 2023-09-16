@@ -17,9 +17,9 @@ class Settings:
     OBSTACLE_SIZE = 50          # Größe der Hindernisse
     OBSTACLE_NUM = 5            # Anzahl der Hindernisse
     OBSTACLE_SAFEZONE = 200     # Abstand von dem Spawn
-    OBJECT_SPAWNPOINT = 10      # Startpunkt der Objekte
+    OBJECT_SPAWNPOINT = 0       # Startpunkt der Objekte
     OBJECT_SIZE = 30            # Größe der Objekte
-    OBJECT_SPAWNRATE = 100      # Zeit in ms, in der ein neues Objekt gespawnt wird
+    OBJECT_SPAWNRATE = 75       # Zeit in ms, in der ein neues Objekt gespawnt wird
 
 class Obstacle(pygame.sprite.Sprite):
     def __init__(self, image: str, scale_multiply_x: float = 1.0, scale_multiply_y: float = 1.0) -> None:
@@ -35,8 +35,6 @@ class Object(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.image.load(os.path.join(Settings.IMAGE_PATH, image)).convert_alpha()
         self.image = pygame.transform.scale(self.image, (Settings.OBJECT_SIZE * scale_multiply_x, Settings.OBJECT_SIZE * scale_multiply_y))
-        self.image.set_colorkey("black")
-        self.image = pygame.transform.scale(self.image, (50, 45))
         self.rect = self.image.get_rect()
         self.rect.left = Settings.OBJECT_SPAWNPOINT
         self.rect.top = Settings.OBJECT_SPAWNPOINT
