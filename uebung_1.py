@@ -3,10 +3,10 @@ import random
 import pygame
 
 def random_obstacle_position_x() -> int:
-    return random.randint(75, Settings.WINDOW.width - Settings.OBSTACLE_SIZE)
+    return random.randint(Settings.OBSTACLE_SAFEZONE, Settings.WINDOW.width - Settings.OBSTACLE_SIZE)
 
 def random_obstacle_position_y() -> int:
-    return random.randint(75, Settings.WINDOW.height - Settings.OBSTACLE_SIZE)
+    return random.randint(Settings.OBSTACLE_SAFEZONE, Settings.WINDOW.height - Settings.OBSTACLE_SIZE)
 
 class Settings:
     WINDOW = pygame.rect.Rect(0, 0, 960, 540)
@@ -14,10 +14,11 @@ class Settings:
     FILE_PATH = os.path.dirname(os.path.abspath(__file__))
     ASSET_PATH = os.path.join(FILE_PATH, "assets")
     IMAGE_PATH = os.path.join(FILE_PATH, ASSET_PATH, "images")
-    OBSTACLE_SIZE = 50
-    OBSTACLE_NUM = 5
-    OBJECT_SIZE = 30
-    OBJECT_SPAWNRATE = 200
+    OBSTACLE_SIZE = 50          # Größe der Hindernisse
+    OBSTACLE_NUM = 5            # Anzahl der Hindernisse
+    OBSTACLE_SAFEZONE = 200     # Abstand von dem Spawn
+    OBJECT_SIZE = 30            # Größe der Objekte
+    OBJECT_SPAWNRATE = 100      # Zeit in ms, in der ein neues Objekt gespawnt wird
 
 class Obstacle(pygame.sprite.Sprite):
     def __init__(self, image: str, scale_multiply_x: float = 1.0, scale_multiply_y: float = 1.0) -> None:
@@ -26,7 +27,7 @@ class Obstacle(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (Settings.OBSTACLE_SIZE * scale_multiply_x, Settings.OBSTACLE_SIZE * scale_multiply_y))
         self.rect = self.image.get_rect()
         self.rect.left = random_obstacle_position_x()
-        self.rect.bottom = random_obstacle_position_y()
+        self.rect.top = random_obstacle_position_y()
 
 class Object(pygame.sprite.Sprite):
     def __init__(self, image: str, scale_multiply_x: float = 1.0, scale_multiply_y: float = 1.0) -> None:
@@ -38,10 +39,12 @@ class Object(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.left = 10
         self.rect.top = 10
-        self.speedx = random.uniform(1.5, 5.5)
-        self.speedy = random.uniform(1.5, 5.5)
+        # Zufällige Geschwindigkeit
+        self.speedx = random.uniform(1.5, 7.5)
+        self.speedy = random.uniform(1.5, 7.5)
     
     def update(self) -> None:
+        # Bewegt das Objekt und lässt es an den Rändern abprallen
         self.rect.move_ip(self.speedx, self.speedy)
         if self.rect.right > Settings.WINDOW.right or self.rect.left <= 0:
             self.speedx *= -1
@@ -76,6 +79,8 @@ class Game:
             self.draw()
             self.spawn_new_mob()
             self.clock.tick(Settings.FPS)
+            # Wie man eine Kollision überprüft: https://coderslegacy.com/python/pygame-sprite-collision-detection/
+            pygame.sprite.groupcollide(self.all_objects, self.all_obstacles, True, False)
 
     def update(self) -> None:
         self.all_objects.update()
