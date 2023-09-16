@@ -72,6 +72,10 @@ class Game:
         self.all_objects = pygame.sprite.Group()
         self.all_objects.add(self.object)
 
+        self.background_image = pygame.image.load(os.path.join(Settings.IMAGE_PATH, "background.png")).convert_alpha()
+        self.background_image = pygame.transform.scale(self.background_image, Settings.WINDOW.size)
+
+
         self.running = True
 
     def run(self) -> None:
@@ -96,7 +100,7 @@ class Game:
             self.all_objects.add(self.object)
 
     def draw(self) -> None:
-        self.screen.fill("black")
+        self.screen.blit(self.background_image, (0, 0))
         self.all_obstacles.draw(self.screen)
         self.all_objects.draw(self.screen)
         pygame.display.flip()
