@@ -29,10 +29,10 @@ class Obstacle(pygame.sprite.Sprite):
         self.rect.bottom = random_obstacle_position_y()
 
 class Test6(pygame.sprite.Sprite):
-    def __init__(self) -> None:
+    def __init__(self, image: str, scale_multiply_x: float = 1.0, scale_multiply_y: float = 1.0) -> None:
         super().__init__()
-        self.image = pygame.image.load(os.path.join(Settings.IMAGE_PATH, "test.png")).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (Settings.OBJECT_SIZE, Settings.OBJECT_SIZE))
+        self.image = pygame.image.load(os.path.join(Settings.IMAGE_PATH, image)).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (Settings.OBJECT_SIZE * scale_multiply_x, Settings.OBJECT_SIZE * scale_multiply_y))
         self.image.set_colorkey("black")
         self.image = pygame.transform.scale(self.image, (50, 45))
         self.rect = self.image.get_rect()
@@ -63,7 +63,7 @@ class Game:
             self.obstacles = Obstacle("test.png", random.uniform(0.75, 1.5), random.uniform(0.75, 1.5))
             self.all_obstacles.add(self.obstacles)
 
-        self.object = Test6()
+        self.object = Test6("test.png")
         self.all_objects = pygame.sprite.Group()
         self.all_objects.add(self.object)
 
@@ -85,7 +85,7 @@ class Game:
         time_now = pygame.time.get_ticks()
         if time_now - self.time_start > Settings.OBJECT_SPAWNRATE:
             self.time_start = time_now            
-            self.object = Test6()
+            self.object = Test6("test.png")
             self.all_objects.add(self.object)
 
     def draw(self) -> None:
