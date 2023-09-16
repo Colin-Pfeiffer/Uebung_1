@@ -3,10 +3,13 @@ import random
 import pygame
 
 def random_obstacle_position_x() -> int:
-    return random.randint(Settings.OBSTACLE_SAFEZONE, Settings.WINDOW.width - Settings.OBSTACLE_SIZE)
+    return random.randint(0, Settings.WINDOW.width - Settings.OBSTACLE_SIZE)
 
-def random_obstacle_position_y() -> int:
-    return random.randint(Settings.OBSTACLE_SAFEZONE, Settings.WINDOW.height - Settings.OBSTACLE_SIZE)
+def random_obstacle_position_y(x: int) -> int:
+    if x > Settings.OBSTACLE_SAFEZONE:
+        return random.randint(0, Settings.WINDOW.height - Settings.OBSTACLE_SIZE)
+    else:
+        return random.randint(Settings.OBSTACLE_SAFEZONE, Settings.WINDOW.height - Settings.OBSTACLE_SIZE)
 
 class Settings:
     WINDOW = pygame.rect.Rect(0, 0, 960, 540)
@@ -19,7 +22,7 @@ class Settings:
     OBSTACLE_SAFEZONE = 200     # Abstand von dem Spawn
     OBJECT_SPAWNPOINT = 0       # Startpunkt der Objekte
     OBJECT_SIZE = 30            # Größe der Objekte
-    OBJECT_SPAWNRATE = 1000       # Zeit in ms, in der ein neues Objekt gespawnt wird
+    OBJECT_SPAWNRATE = 200       # Zeit in ms, in der ein neues Objekt gespawnt wird
 
 class Obstacle(pygame.sprite.Sprite):
     def __init__(self, image: str, scale_multiply_x: float = 1.0, scale_multiply_y: float = 1.0) -> None:
@@ -28,7 +31,7 @@ class Obstacle(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (Settings.OBSTACLE_SIZE * scale_multiply_x, Settings.OBSTACLE_SIZE * scale_multiply_y))
         self.rect = self.image.get_rect()
         self.rect.left = random_obstacle_position_x()
-        self.rect.top = random_obstacle_position_y()
+        self.rect.top = random_obstacle_position_y(self.rect.left)
 
 class Object(pygame.sprite.Sprite):
     def __init__(self, image: str, scale_multiply_x: float = 1.0, scale_multiply_y: float = 1.0) -> None:
